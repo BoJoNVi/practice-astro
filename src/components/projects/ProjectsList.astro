@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import Section from "@components/widgets/Section.astro";
+
+const projectsCollection = await getCollection("projects");
+---
+
+<Section className="min-h-screen border">
+  <div class="container mx-auto border">
+    <h2 class="text-2xl">Projects List</h2>
+    <ul>
+      {
+        projectsCollection.map(async (project) => {
+          const { data, render } = project;
+          const { Content } = await render();
+          return (
+            <li>
+              <h2>{project.data.title}</h2>
+              <Content />
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</Section>
