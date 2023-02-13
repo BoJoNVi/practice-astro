@@ -1,0 +1,38 @@
+---
+import Section from "@components/widgets/Section.astro";
+import Layout from "@layouts/Layout.astro";
+import { getCollection, CollectionEntry } from "astro:content";
+
+export const getStaticPaths = async () => {
+  const projectsCollection = await getCollection("projects");
+
+  return projectsCollection.map((project) => ({
+    params: {
+      project: project.slug,
+    },
+    props: {
+      project,
+    },
+  }));
+};
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props as Props;
+const { data, render } = project;
+const { title } = data;
+const { Content } = await render();
+---
+
+<Layout title={title}>
+  <Section className={"border-b-4"}>
+    <h1 class="text-3xl text-center">{title}</h1>
+  </Section>
+  <Section>
+    <div class="container grid place-items-center mx-auto">
+      <Content />
+    </div>
+  </Section>
+</Layout>
